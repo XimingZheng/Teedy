@@ -19,3 +19,22 @@ docs/*
 
 #macos
 .DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# VS Code
+.vscode/
+
+# Runtime/generated data (local instance files)
+/data/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Java crash dumps
+hs_err_pid*
