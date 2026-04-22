@@ -5,6 +5,8 @@
 /*/gen
 /*/target
 /*/build
+/target
+/.omx
 /out
 /.idea
 /.project
