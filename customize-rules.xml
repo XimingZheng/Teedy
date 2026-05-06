@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset
+		name="Practice7 Metrics Ruleset"
+		xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.github.io/pmd-7.0.0/ruleset_2_0_0.xsd">
+	<description>Only rules related to LoC, CC, WMC, CBO, cohesion</description>
+
+	<rule ref="category/java/design.xml/NcssCount"/>
+	<rule ref="category/java/design.xml/CyclomaticComplexity"/>
+	<rule ref="category/java/design.xml/CouplingBetweenObjects"/>
+	<rule ref="category/java/design.xml/GodClass"/>
+	<rule ref="category/java/design.xml/DataClass"/>
+</ruleset>

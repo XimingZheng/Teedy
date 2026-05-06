@@ -59,9 +59,11 @@
     <org.apache.maven.plugins.maven-antrun-plugin.version>3.1.0</org.apache.maven.plugins.maven-antrun-plugin.version>
     <org.apache.maven.plugins.maven-jar-plugin.version>3.3.0</org.apache.maven.plugins.maven-jar-plugin.version>
     <org.apache.maven.plugins.maven-site-plugin.version>3.21.0</org.apache.maven.plugins.maven-site-plugin.version>
+    <org.apache.maven.plugins.maven-pmd-plugin.version>3.26.0</org.apache.maven.plugins.maven-pmd-plugin.version>
     <org.apache.maven.plugins.maven-project-info-reports-plugin.version>3.9.0</org.apache.maven.plugins.maven-project-info-reports-plugin.version>
     <org.apache.maven.plugins.maven-war-plugin.version>3.3.2</org.apache.maven.plugins.maven-war-plugin.version>
     <org.apache.maven.plugins.maven-surefire-plugin.version>3.0.0</org.apache.maven.plugins.maven-surefire-plugin.version>
+    <org.jacoco.jacoco-maven-plugin.version>0.8.12</org.jacoco.jacoco-maven-plugin.version>
     <org.eclipse.jetty.jetty-maven-plugin.version>11.0.20</org.eclipse.jetty.jetty-maven-plugin.version>
   </properties>
 
@@ -105,12 +107,25 @@
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>${org.apache.maven.plugins.maven-surefire-plugin.version}</version>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>${org.apache.maven.plugins.maven-pmd-plugin.version}</version>
         <configuration>
-          <forkCount>1</forkCount>
-          <reuseForks>false</reuseForks>
+          <rulesets>
+            <ruleset>${maven.multiModuleProjectDirectory}/customize-rules.xml</ruleset>
+          </rulesets>
+          <failOnViolation>false</failOnViolation>
+          <linkXRef>false</linkXRef>
         </configuration>
+        <executions>
+          <execution>
+            <id>run-pmd</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>pmd</goal>
+              <goal>cpd</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
 
       <plugin>
@@ -123,6 +138,26 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
         <version>${org.apache.maven.plugins.maven-site-plugin.version}</version>
+      </plugin>
+
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${org.jacoco.jacoco-maven-plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-agent</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>report</id>
+            <phase>test</phase>
+            <goals>
+              <goal>report</goal>
+            </goals>
+          </execution>
+        </executions>
       </plugin>
     </plugins>
   </build>
@@ -144,6 +179,26 @@
               <report>plugin-management</report>
               <report>plugins</report>
               <report>summary</report>
+            </reports>
+          </reportSet>
+        </reportSets>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>${org.apache.maven.plugins.maven-pmd-plugin.version}</version>
+        <configuration>
+          <rulesets>
+            <ruleset>${maven.multiModuleProjectDirectory}/customize-rules.xml</ruleset>
+          </rulesets>
+          <linkXRef>false</linkXRef>
+        </configuration>
+        <reportSets>
+          <reportSet>
+            <reports>
+              <report>pmd</report>
+              <report>cpd</report>
             </reports>
           </reportSet>
         </reportSets>
