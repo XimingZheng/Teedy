@@ -36,13 +36,6 @@ pipeline {
                 }
             }
         }
-        stage('Javadoc') {
-            steps {
-                script {
-                    runMaven('javadoc:javadoc')
-                }
-            }
-        }
         stage('Site') {
             steps {
                 script {
