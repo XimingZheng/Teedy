@@ -10,6 +10,7 @@
 
   <name>Docs Parent</name>
   <description>Teedy multi-module parent project for core services, shared web components, and web application packaging.</description>
+  <url>https://github.com/XimingZheng/Teedy</url>
 
   <properties>
     <maven.compiler.source>11</maven.compiler.source>
@@ -70,16 +71,16 @@
   </properties>
 
   <scm>
-    <connection>scm:git:https://github.com/sismics/docs.git</connection>
-    <developerConnection>scm:git:https://github.com/docs/docs.git</developerConnection>
-    <url>scm:git:https://github.com/sismics/docs.git</url>
+    <connection>scm:git:https://github.com/XimingZheng/Teedy.git</connection>
+    <developerConnection>scm:git:https://github.com/XimingZheng/Teedy.git</developerConnection>
+    <url>https://github.com/XimingZheng/Teedy</url>
     <tag>HEAD</tag>
   </scm>
 
   <distributionManagement>
     <site>
       <id>local-site</id>
-      <url>file://${project.basedir}/target/staging</url>
+      <url>file:${project.build.directory}/staging</url>
     </site>
   </distributionManagement>
 
@@ -205,7 +206,7 @@
         <version>${org.apache.maven.plugins.maven-pmd-plugin.version}</version>
         <configuration>
           <rulesets>
-            <ruleset>${project.basedir}/config/pmd/teedy-metrics-ruleset.xml</ruleset>
+            <ruleset>${maven.multiModuleProjectDirectory}/customize-rules.xml</ruleset>
           </rulesets>
           <linkXRef>false</linkXRef>
         </configuration>
