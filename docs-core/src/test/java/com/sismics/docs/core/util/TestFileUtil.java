@@ -3,6 +3,7 @@ package com.sismics.docs.core.util;
 import com.google.common.collect.Lists;
 import com.google.common.io.Resources;
 import com.sismics.BaseTest;
+import com.sismics.docs.BaseTransactionalTest;
 import com.sismics.docs.core.dao.dto.DocumentDto;
 import com.sismics.docs.core.model.jpa.File;
 import com.sismics.docs.core.util.format.*;
@@ -24,7 +25,7 @@ import java.util.Date;
  * 
  * @author bgamard
  */
-public class TestFileUtil extends BaseTest {
+public class TestFileUtil extends BaseTransactionalTest {
     @Test
     public void extractContentOpenDocumentTextTest() throws Exception {
         Path path = Paths.get(getResource(FILE_ODT).toURI());

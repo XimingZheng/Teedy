@@ -1,6 +1,6 @@
 package com.sismics.util.format;
 
-import com.sismics.BaseTest;
+import com.sismics.docs.BaseTransactionalTest;
 import com.sismics.docs.core.util.format.PdfFormatHandler;
 import org.junit.Assert;
 import org.junit.Test;
@@ -12,7 +12,7 @@ import java.nio.file.Paths;
  *
  * @author bgamard
  */
-public class TestPdfFormatHandler extends BaseTest {
+public class TestPdfFormatHandler extends BaseTransactionalTest {
     /**
      * Test related to https://github.com/sismics/docs/issues/373.
      */

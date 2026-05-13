@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Locale;
 
 /**
  * Utility to check MIME types.
@@ -20,6 +21,16 @@ public class MimeTypeUtil {
      * @throws IOException e
      */
     public static String guessMimeType(Path file, String name) throws IOException {
+        if (name != null) {
+            String lowerName = name.toLowerCase(Locale.ROOT);
+            if (lowerName.endsWith(".csv")) {
+                return MimeType.TEXT_CSV;
+            }
+            if (lowerName.endsWith(".zip")) {
+                return MimeType.APPLICATION_ZIP;
+            }
+        }
+
         String mimeType = Files.probeContentType(file);
 
         if (mimeType == null && name != null) {
