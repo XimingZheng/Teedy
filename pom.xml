@@ -9,6 +9,8 @@
   <version>1.12-SNAPSHOT</version>
 
   <name>Docs Parent</name>
+  <description>Multi-module document management system (Teedy): core services, shared web libraries, and the deployable web application.</description>
+  <url>https://github.com/sismics/docs</url>
 
   <properties>
     <maven.compiler.source>11</maven.compiler.source>

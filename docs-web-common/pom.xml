@@ -13,6 +13,7 @@
   <artifactId>docs-web-common</artifactId>
   <packaging>jar</packaging>
   <name>Docs Web Commons</name>
+  <description>Shared web tier: JAX-RS base resources, authentication helpers, and common Jersey/servlet utilities used by the WAR module.</description>
 
   <dependencies>
     <!-- Dependencies to Docs -->

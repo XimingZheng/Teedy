@@ -13,6 +13,7 @@
   <artifactId>docs-core</artifactId>
   <packaging>jar</packaging>
   <name>Docs Core</name>
+  <description>Core backend: domain model, persistence (Hibernate), full-text indexing (Lucene), file processing, and LDAP integration.</description>
 
   <dependencies>
     <!-- Persistence layer dependencies -->
