@@ -39,9 +39,11 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry(env.DOCKER_REGISTRY, env.DOCKER_HUB_CREDENTIALS) {
-                        docker.image("${env.IMAGE_NAME}:${env.DOCKER_TAG}").push()
-                        docker.image("${env.IMAGE_NAME}:${env.DOCKER_TAG}").push('latest')
+                    withCredentials([usernamePassword(credentialsId: env.DOCKER_HUB_CREDENTIALS, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
+                        dockerLogin()
+                        runDocker("docker push ${env.IMAGE_NAME}:${env.DOCKER_TAG}")
+                        runDocker("docker tag ${env.IMAGE_NAME}:${env.DOCKER_TAG} ${env.IMAGE_NAME}:latest")
+                        runDocker("docker push ${env.IMAGE_NAME}:latest")
                     }
                 }
             }
@@ -81,5 +83,13 @@ def runDocker(String command) {
         sh command
     } else {
         bat command
+    }
+}
+
+def dockerLogin() {
+    if (isUnix()) {
+        sh 'echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin'
+    } else {
+        bat 'echo %DOCKER_PASSWORD% | docker login -u %DOCKER_USERNAME% --password-stdin'
     }
 }
