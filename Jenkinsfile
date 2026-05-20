@@ -1,61 +1,69 @@
 pipeline {
     agent any
+
+    parameters {
+        string(name: 'DOCKER_IMAGE', defaultValue: 'simonzheng050428/teedy', description: 'Docker Hub repository, for example username/teedy')
+    }
+
+    environment {
+        DOCKER_HUB_CREDENTIALS = 'dockerhub_credentials'
+        DOCKER_REGISTRY = 'https://index.docker.io/v1/'
+        IMAGE_NAME = "${params.DOCKER_IMAGE}"
+        DOCKER_TAG = "${env.BUILD_NUMBER}"
+        CONTAINER_PREFIX = 'teedy-container'
+    }
+
     stages {
-        stage('Clean') {
+        stage('Checkout') {
+            steps {
+                checkout scm
+            }
+        }
+
+        stage('Build WAR') {
             steps {
                 script {
-                    runMaven('clean')
+                    runMaven('-B -DskipTests clean package')
                 }
             }
         }
-        stage('Compile') {
+
+        stage('Build Docker Image') {
             steps {
                 script {
-                    runMaven('compile')
+                    docker.build("${env.IMAGE_NAME}:${env.DOCKER_TAG}")
                 }
             }
         }
-        stage('Test') {
+
+        stage('Push Docker Image') {
             steps {
                 script {
-                    runMaven('test -Dmaven.test.failure.ignore=true')
+                    docker.withRegistry(env.DOCKER_REGISTRY, env.DOCKER_HUB_CREDENTIALS) {
+                        docker.image("${env.IMAGE_NAME}:${env.DOCKER_TAG}").push()
+                        docker.image("${env.IMAGE_NAME}:${env.DOCKER_TAG}").push('latest')
+                    }
                 }
             }
         }
-        stage('PMD') {
+
+        stage('Run Three Containers') {
             steps {
                 script {
-                    runMaven('pmd:pmd')
-                }
-            }
-        }
-        stage('JaCoCo') {
-            steps {
-                script {
-                    runMaven('jacoco:report')
-                }
-            }
-        }
-        stage('Site') {
-            steps {
-                script {
-                    runMaven('site')
-                }
-            }
-        }
-        stage('Package') {
-            steps {
-                script {
-                    runMaven('package -DskipTests')
+                    [8082, 8083, 8084].each { port ->
+                        def name = "${env.CONTAINER_PREFIX}-${port}"
+                        runDocker("docker rm -f ${name} || true")
+                        runDocker("docker run -d --name ${name} -p ${port}:8080 ${env.IMAGE_NAME}:${env.DOCKER_TAG}")
+                    }
+                    runDocker("docker ps --filter \"name=${env.CONTAINER_PREFIX}\"")
                 }
             }
         }
     }
+
     post {
         always {
-            archiveArtifacts artifacts: '**/target/site/**/*.*', fingerprint: true, allowEmptyArchive: true
-            archiveArtifacts artifacts: '**/target/**/*.jar', fingerprint: true, allowEmptyArchive: true
-            archiveArtifacts artifacts: '**/target/**/*.war', fingerprint: true, allowEmptyArchive: true
+            archiveArtifacts artifacts: 'docs-web/target/*.war', fingerprint: true, allowEmptyArchive: true
         }
     }
 }
@@ -65,5 +73,13 @@ def runMaven(String args) {
         sh "mvn ${args}"
     } else {
         bat "mvn ${args}"
+    }
+}
+
+def runDocker(String command) {
+    if (isUnix()) {
+        sh command
+    } else {
+        bat command
     }
 }
